@@ -1,0 +1,350 @@
+openapi: 3.0.0
+info:
+  title: Bank App API
+  description: REST API for a web banking application
+  version: 1.0.0
+  contact:
+    name: Bank App Development Team
+    email: dev@bankapp.com
+
+servers:
+  - url: http://localhost:5000/api
+    description: Development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "user123"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        phoneNumber:
+          type: string
+          example: "+1234567890"
+        balance:
+          type: number
+          example: 1000.50
+        isPhoneVerified:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "txn123"
+        fromUserId:
+          type: string
+          example: "user123"
+        toUserId:
+          type: string
+          example: "user456"
+        amount:
+          type: number
+          example: 100.00
+        type:
+          type: string
+          enum: [sent, received]
+        createdAt:
+          type: string
+          format: date-time
+
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+        - phoneNumber
+      properties:
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        password:
+          type: string
+          minLength: 6
+          example: "password123"
+        phoneNumber:
+          type: string
+          example: "+1234567890"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        password:
+          type: string
+          example: "password123"
+
+    VerifyPhoneRequest:
+      type: object
+      required:
+        - email
+        - code
+      properties:
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+        code:
+          type: string
+          minLength: 6
+          maxLength: 6
+          example: "123456"
+
+    SendMoneyRequest:
+      type: object
+      required:
+        - toEmail
+        - amount
+      properties:
+        toEmail:
+          type: string
+          format: email
+          example: "recipient@example.com"
+        amount:
+          type: number
+          minimum: 0.01
+          example: 50.00
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      description: Creates a new user account and sends SMS verification code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: User created successfully, SMS sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User registered successfully. SMS verification code sent."
+                  userId:
+                    type: string
+                    example: "user123"
+        "400":
+          description: Bad request (invalid data or user already exists)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Email already registered"
+
+  /auth/verify-phone:
+    post:
+      tags:
+        - Authentication
+      summary: Verify phone number with SMS code
+      description: Verifies the phone number using the SMS code sent during registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyPhoneRequest"
+      responses:
+        "200":
+          description: Phone verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Phone verified successfully"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  user:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid verification code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid verification code"
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticates user with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Login successful"
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  user:
+                    $ref: "#/components/schemas/User"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid email or password"
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Logs out the current user
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logout successful"
+
+  /users/dashboard:
+    get:
+      tags:
+        - Users
+      summary: Get user dashboard data
+      description: Returns user profile and recent transactions for dashboard
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Dashboard data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+                  recentTransactions:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Transaction"
+        "401":
+          description: Unauthorized - invalid or missing token
+
+  /transactions:
+    get:
+      tags:
+        - Transactions
+      summary: Get user's transaction history
+      description: Returns all transactions for the authenticated user
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+        "401":
+          description: Unauthorized - invalid or missing token
+
+  /transactions/send:
+    post:
+      tags:
+        - Transactions
+      summary: Send money to another user
+      description: Transfer money from authenticated user to another registered user
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMoneyRequest"
+      responses:
+        "201":
+          description: Money sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Money sent successfully"
+                  transaction:
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          description: Bad request (insufficient funds, invalid recipient, etc.)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Insufficient balance"
+        "401":
+          description: Unauthorized - invalid or missing token
