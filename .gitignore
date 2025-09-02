@@ -36,3 +36,5 @@ Thumbs.db
 # mongodb-memory-server cache
 backend/node_modules/.cache/mongodb-memory-server/
 
+node_modules/
+backend/node_modules/.cache/
