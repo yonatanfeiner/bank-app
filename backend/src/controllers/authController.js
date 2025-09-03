@@ -15,7 +15,7 @@ const generateAccountBalance = () => {
 
 export const register = async (req, res) => {
   try {
-    const { email, password, phoneNumber } = req.body;
+    const { email, password, phoneNumber } = req.body; // Destructure from req.body
 
     // Basic validation (Mongoose will also validate)
     if (!email || !password || !phoneNumber) {

@@ -1,17 +1,8 @@
 // src/services/smsService.js
 
-/**
- * SMS Service for Bank App
- * 
- * Phase 1: Console logging for testing
- * Phase 2: Will integrate with Twilio for real SMS
- */
-
 // Simple SMS service that logs to console (for testing)
 export const sendSMS = async (phoneNumber, message) => {
   try {
-    // For now, just log the SMS to console
-    console.log('📱 SMS SENT:');
     console.log(`   To: ${phoneNumber}`);
     console.log(`   Message: ${message}`);
     console.log(`   Time: ${new Date().toLocaleString()}`);
@@ -39,56 +30,6 @@ export const sendSMS = async (phoneNumber, message) => {
     };
   }
 };
-
-/**
- * Future Twilio Integration (commented out for now)
- * Uncomment and configure when ready to use real SMS
- */
-
-/*
-import twilio from 'twilio';
-
-// Twilio configuration
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
-
-// Initialize Twilio client
-const client = twilio(accountSid, authToken);
-
-export const sendSMSWithTwilio = async (phoneNumber, message) => {
-  try {
-    // Validate Twilio configuration
-    if (!accountSid || !authToken || !twilioPhoneNumber) {
-      throw new Error('Twilio configuration missing');
-    }
-
-    // Send SMS via Twilio
-    const result = await client.messages.create({
-      body: message,
-      from: twilioPhoneNumber,
-      to: phoneNumber
-    });
-
-    console.log(`✅ SMS sent successfully: ${result.sid}`);
-    
-    return {
-      success: true,
-      messageId: result.sid,
-      status: result.status
-    };
-
-  } catch (error) {
-    console.error('❌ Twilio SMS Error:', error);
-    
-    return {
-      success: false,
-      error: error.message,
-      status: 'failed'
-    };
-  }
-};
-*/
 
 // Validate phone number format
 export const isValidPhoneNumber = (phoneNumber) => {

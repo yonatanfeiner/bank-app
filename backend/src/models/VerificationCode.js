@@ -9,7 +9,8 @@ const verificationCodeSchema = new mongoose.Schema({
   code: {
     type: String,
     required: [true, 'Verification code is required'],
-    length: 6
+    minlength: 6,
+    maxlength: 6
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +33,5 @@ const verificationCodeSchema = new mongoose.Schema({
 
 // Indexes
 verificationCodeSchema.index({ phoneNumber: 1 });
-// verificationCodeSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 }); // TTL index
 
 export default mongoose.model('VerificationCode', verificationCodeSchema);
