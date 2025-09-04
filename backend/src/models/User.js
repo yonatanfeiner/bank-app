@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Phone number is required'],
     unique: true,
     trim: true,
-    match: [/^\+?[\d\s\-\(\)]{10,}$/, 'Please enter a valid phone number']
+    match: [/^(\+?\d{1,3}[- ]?)?\d{7,10}$/, 'Please enter a valid phone number']
   },
   isPhoneVerified: {
     type: Boolean,
@@ -30,6 +30,12 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
     min: [0, 'Account balance cannot be negative']
+  },
+
+  name: {
+    type: String,
+    required: false,
+    trim: true,
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt

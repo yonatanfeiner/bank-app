@@ -69,7 +69,8 @@ export const getDashboard = async (req, res) => {
       phoneNumber: user.phoneNumber,
       balance: user.accountBalance,
       isPhoneVerified: user.isPhoneVerified,
-      createdAt: user.createdAt
+      createdAt: user.createdAt,
+      name: user.name
     };
 
     res.status(200).json({

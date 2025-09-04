@@ -1,4 +1,4 @@
-import express from 'express';
+import express from 'express'; // Express framework for building web applications
 import { register, verifyPhone, login, logout } from '../controllers/authController.js';
 
 const router = express.Router();

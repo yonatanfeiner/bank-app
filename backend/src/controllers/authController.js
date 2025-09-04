@@ -15,13 +15,13 @@ const generateAccountBalance = () => {
 
 export const register = async (req, res) => {
   try {
-    const { email, password, phoneNumber } = req.body; // Destructure from req.body
+    const { email, password, phoneNumber, name } = req.body; // Destructure from req.body
 
     // Basic validation (Mongoose will also validate)
     if (!email || !password || !phoneNumber) {
       return res.status(400).json({
         success: false,
-        error: 'Email, password, and phone number are required'
+        error: 'Email, password, phone number and name are required'
       });
     }
     
@@ -52,7 +52,8 @@ export const register = async (req, res) => {
       password, // Will be hashed automatically by middleware
       phoneNumber,
       accountBalance: generateAccountBalance(),
-      isPhoneVerified: false
+      isPhoneVerified: false,
+      name
     });
 
     // Save user to database
