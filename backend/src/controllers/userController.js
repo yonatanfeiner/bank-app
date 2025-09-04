@@ -217,3 +217,74 @@ export const transferMoney = async (req, res) => {
     });
   }
 };
+
+export const editProfile = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { name, phoneNumber, email } = req.body;
+    if (name) {
+      if (typeof name !== 'string' || name.trim().length < 2) {
+        return res.status(400).json({
+          success: false,
+          error: 'Name must be at least 2 characters long'
+        });
+      }
+    }
+    if (phoneNumber) {
+      const phoneRegex = /^\+?[0-9]\d{1,14}$/; // Simple E.164 format check
+      if (!phoneRegex.test(phoneNumber)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid phone number format'
+        });
+      }
+    }
+
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid email format'
+        });
+      }
+    }
+
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+    
+    // Update fields if provided
+    if (name) user.name = name.trim();
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (email) user.email = email.toLowerCase();
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: {
+        user: {
+          id: user._id,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          name: user.name,
+          balance: user.accountBalance,
+          isPhoneVerified: user.isPhoneVerified,
+          createdAt: user.createdAt
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Edit profile error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error while editing profile'
+    });
+  }
+}

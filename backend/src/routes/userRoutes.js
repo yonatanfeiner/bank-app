@@ -1,6 +1,7 @@
 import express from 'express';
 import { getDashboard, transferMoney } from '../controllers/userController.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
+import { editProfile } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -72,5 +73,7 @@ router.get('/dashboard', authenticateToken, getDashboard);
  *         description: Unauthorized
  */
 router.post('/transfer', authenticateToken, transferMoney);
+
+router.patch('/edit-profile', editProfile);
 
 export default router;

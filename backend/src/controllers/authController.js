@@ -266,15 +266,6 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    // With JWT, logout is typically handled on the client side
-    // by removing the token from storage
-    // 
-    // For a more secure approach, you could:
-    // 1. Maintain a blacklist of tokens
-    // 2. Use refresh tokens
-    // 3. Store sessions in database
-    //
-    // For now, we'll just send a success response
     
     res.status(200).json({
       success: true,
