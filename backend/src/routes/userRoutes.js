@@ -74,6 +74,6 @@ router.get('/dashboard', authenticateToken, getDashboard);
  */
 router.post('/transfer', authenticateToken, transferMoney);
 
-router.patch('/edit-profile', editProfile);
+router.patch('/edit-profile', authenticateToken, editProfile);
 
 export default router;

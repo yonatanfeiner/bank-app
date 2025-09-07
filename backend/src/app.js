@@ -80,7 +80,9 @@ app.get('/api/debug', (req, res) => {
       'POST /api/auth/verify-phone',
       'POST /api/auth/login',
       'POST /api/auth/logout',
-      'GET /api/users/dashboard'
+      'GET /api/users/dashboard',
+      'POST /api/users/transfer',
+      'PATCH /api/users/edit-profile'
     ],
     swaggerInfo: 'Check /api-docs for documentation',
     environment: {
