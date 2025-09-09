@@ -1,3 +1,6 @@
+// this file is the entry point of the backend server
+// It sets up the Express app, connects to the database, and starts the server
+
 import app from "./src/app.js"
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
@@ -6,13 +9,15 @@ const PORT = process.env.PORT || 5000;
 
 // Create HTTP server and bind Socket.IO
 const httpServer = createServer(app);
+
 export const io = new SocketIOServer(httpServer, {
   cors: {
     origin: '*',
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
   }
 });
 
+// Handle socket connections
 io.on('connection', (socket) => {
   console.log('🔌 Socket connected:', socket.id);
   socket.on('disconnect', () => {

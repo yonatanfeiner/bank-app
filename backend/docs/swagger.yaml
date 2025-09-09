@@ -1,3 +1,5 @@
+# the purpose of this file is to define and document the API structure and endpoints for the banking application.
+
 openapi: 3.0.0
 info:
   title: Bank App API
@@ -82,6 +84,9 @@ components:
         phoneNumber:
           type: string
           example: "+1234567890"
+        name:
+          type: string
+          example: "John Doe"
 
     LoginRequest:
       type: object
@@ -289,62 +294,29 @@ paths:
         "401":
           description: Unauthorized - invalid or missing token
 
-  /transactions:
-    get:
-      tags:
-        - Transactions
-      summary: Get user's transaction history
-      description: Returns all transactions for the authenticated user
-      security:
-        - BearerAuth: []
-      responses:
-        "200":
-          description: Transactions retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Transaction"
-        "401":
-          description: Unauthorized - invalid or missing token
-
-  /transactions/send:
-    post:
-      tags:
-        - Transactions
-      summary: Send money to another user
-      description: Transfer money from authenticated user to another registered user
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
+/users/edit-profile:
+  patch:
+    tags:
+      - Users
+    summary: Edit user profile
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/EditProfileRequest"
+    responses:
+      "200":
+        description: Profile updated successfully
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SendMoneyRequest"
-      responses:
-        "201":
-          description: Money sent successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Money sent successfully"
-                  transaction:
-                    $ref: "#/components/schemas/Transaction"
-        "400":
-          description: Bad request (insufficient funds, invalid recipient, etc.)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Insufficient balance"
-        "401":
-          description: Unauthorized - invalid or missing token
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Profile updated successfully"
+                user:
+                  $ref: "#/components/schemas/User"

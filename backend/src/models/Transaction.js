@@ -1,3 +1,5 @@
+// the purpose of this file is to define the Transaction model for MongoDB using Mongoose
+// it is impoerted from files: 
 import mongoose from 'mongoose';
 
 const transactionSchema = new mongoose.Schema({

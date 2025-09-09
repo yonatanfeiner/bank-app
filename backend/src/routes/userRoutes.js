@@ -74,6 +74,64 @@ router.get('/dashboard', authenticateToken, getDashboard);
  */
 router.post('/transfer', authenticateToken, transferMoney);
 
+/**
+ * @swagger
+ * /api/users/edit-profile:
+ *   patch:
+ *     summary: Edit user profile
+ *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "newemail@example.com"
+ *               phoneNumber:
+ *                 type: string
+ *                 example: "+1234567890"
+ *               password:
+ *                 type: string
+ *                 minLength: 6
+ *                 example: "newPassword123"
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Profile updated successfully"
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     phoneNumber:
+ *                       type: string
+ *                     balance:
+ *                       type: number
+ *                     isPhoneVerified:
+ *                       type: boolean
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *       400:
+ *         description: Bad request (invalid data)
+ *       401:
+ *         description: Unauthorized - invalid or missing token
+ */
 router.patch('/edit-profile', authenticateToken, editProfile);
 
 export default router;

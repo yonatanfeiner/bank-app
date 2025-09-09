@@ -1,3 +1,6 @@
+// the purpose of this file is to configure Swagger for API documentation
+// it is imported in app.js
+
 const PORT = process.env.PORT || 5000;
 
 const swaggerOptions = {

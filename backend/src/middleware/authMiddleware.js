@@ -6,9 +6,9 @@ export const authenticateToken = async (req, res, next) => {
   try {
     // Step 1: Get token from Authorization header
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Format: "Bearer TOKEN"
+    const token = authHeader && authHeader.split(' ')[1]; // cut the "Bearer " part
 
-    // Step 2: Check if token exists
+    // Step 2: Check if token exists in the localStorage
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -26,7 +26,7 @@ export const authenticateToken = async (req, res, next) => {
     }
 
     // Step 4: Get user from database to make sure they still exist
-    const user = await User.findById(decoded.userId); // Note: we store userId in JWT, not email
+    const user = await User.findById(decoded.userId); 
     if (!user) {
       return res.status(401).json({
         success: false,

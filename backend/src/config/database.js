@@ -1,3 +1,6 @@
+// the purpose of this file is to connect to the MongoDB database using Mongoose
+// it is imported and called in app.js when the application starts
+
 import mongoose from 'mongoose';
 
 const connectDatabase = async () => {

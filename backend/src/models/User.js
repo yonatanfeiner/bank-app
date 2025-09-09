@@ -1,3 +1,6 @@
+// the purpose of this file is to define the User model for MongoDB using Mongoose
+// it is used by the controllers.
+
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
@@ -31,7 +34,6 @@ const userSchema = new mongoose.Schema({
     default: 0,
     min: [0, 'Account balance cannot be negative']
   },
-
   name: {
     type: String,
     required: false,
@@ -47,7 +49,7 @@ userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   
   try {
-    // Hash password with cost of 12
+    // Hash password with bcrypt with a salt round of 12. salt is random data added to the hash to make it more secure.
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
     next();

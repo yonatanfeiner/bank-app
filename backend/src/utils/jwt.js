@@ -1,8 +1,7 @@
-// src/utils/jwt.js
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-dev-secret-key-not-for-production';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '10m';
 
 // Generate JWT token
 export const generateToken = (userId) => {

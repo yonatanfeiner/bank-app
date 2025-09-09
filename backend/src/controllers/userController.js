@@ -4,8 +4,8 @@ import Transaction from '../models/Transaction.js';
 // Get user dashboard data
 export const getDashboard = async (req, res) => {
   try {
-    // req.user is available because of authenticateToken middleware
-    const userId = req.userId; // We'll get this from the middleware
+    // req.userID is available because of authenticateToken middleware
+    const userId = req.userId; 
 
     // Get user data from database
     const user = await User.findById(userId);
@@ -38,7 +38,7 @@ export const getDashboard = async (req, res) => {
     // Format transactions for display (as per requirements)
     const formattedTransactions = recentTransactions.map(transaction => {
       if (transaction.senderId.toString() === userId.toString()) {
-        // User sent money (show with '-' sign as per requirements)
+        // User sent money (show with '-' sign )
         return {
           id: transaction._id,
           type: 'sent',

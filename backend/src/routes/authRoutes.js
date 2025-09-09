@@ -31,6 +31,9 @@ const router = express.Router();
  *               phoneNumber:
  *                 type: string
  *                 example: "+1234567890"
+ *               name:
+ *                 type: string
+ *                 example: "John Doe"
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -143,4 +146,5 @@ router.post('/login', login);
  */
 router.post('/logout', logout);
 
+// imported in app.js and used as middleware for any route starting with /api/auth
 export default router;

@@ -12,14 +12,18 @@ import connectDatabase from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 
+// Initialize Express app which is the main component of the backend
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB when app initializes
 connectDatabase();
 
-// Middleware
+// Enable CORS for all routes. 
+// CORS is a security feature implemented by browsers to restrict web pages from 
+// making requests to a different domain than the one that served the web page. 
 app.use(cors());
+// Middleware to parse incoming JSON requests and put the parsed data in req.body
 app.use(express.json());
 
 // Creating JSON object in format OpenAPI Spec (standard REST API description)
